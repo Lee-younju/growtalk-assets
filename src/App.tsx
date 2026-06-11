@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
-import { MessageSquare, MessageCircle, CalendarSync, BarChart3, ShieldCheck, ChevronRight, Menu, X, ArrowRight, Check, Zap, Paperclip } from "lucide-react";
+import { MessageSquare, MessageCircle, CalendarSync, BarChart3, ShieldCheck, ChevronRight, ChevronDown, Menu, X, ArrowRight, Check, Zap, Paperclip, User, CreditCard, LogOut } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 import { FloatingWidget } from "./components/FloatingWidget";
 import { Logo } from "./components/Logo";
 import { FeaturesPage } from "./pages/FeaturesPage";
@@ -14,7 +14,8 @@ import { PricingPage } from "./pages/PricingPage";
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { startDemoFlow, setCurrentFlow } = React.useContext(FlowContext);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { startDemoFlow, isLoggedIn, setIsLoggedIn, openPlanModal } = React.useContext(FlowContext);
   const location = useLocation();
   const isPricingPage = location.pathname === '/pricing';
 
@@ -25,6 +26,23 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('#account-dropdown-container')) {
+        setDropdownOpen(false);
+      }
+    };
+    window.addEventListener('click', handleOutsideClick);
+    return () => window.removeEventListener('click', handleOutsideClick);
+  }, [dropdownOpen]);
+
+  const handleLoginClick = () => {
+    setIsLoggedIn(true);
+  };
 
   return (
     <header
@@ -43,16 +61,73 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <button 
-            onClick={() => setCurrentFlow('login')}
-            className={`text-sm font-medium ${isPricingPage ? 'text-gray-900 border border-gray-200 hover:bg-gray-50 rounded-full px-5 py-2.5 bg-white shadow-sm transition-all' : 'text-gray-700 hover:text-black transition-colors px-4 py-2'}`}
-          >
-            로그인
-          </button>
+          {isLoggedIn ? (
+            <div className="relative" id="account-dropdown-container">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold select-none cursor-pointer transition-all ${
+                  isPricingPage 
+                    ? 'text-gray-900 border border-gray-200 bg-white shadow-xs hover:bg-gray-50' 
+                    : 'text-slate-700 bg-slate-100/70 border border-transparent hover:bg-slate-200/80'
+                }`}
+                id="header-user-email-btn"
+              >
+                <div className="w-5 h-5 rounded-full bg-[#274236] text-white flex items-center justify-center text-[10px] font-bold shrink-0">U</div>
+                <span className="max-w-[125px] truncate">user@example.com</span>
+                <ChevronDown className="w-3 h-3 text-slate-500" />
+              </button>
+
+              <AnimatePresence>
+                {dropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 5, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 5, scale: 0.98 }}
+                    transition={{ duration: 0.12 }}
+                    className="absolute right-0 mt-1.5 w-36 bg-white rounded-xl shadow-lg border border-slate-200 p-1 flex flex-col z-50 origin-top-right text-xs font-semibold"
+                    id="header-account-dropdown"
+                  >
+                    <button
+                      onClick={() => {
+                        setDropdownOpen(false);
+                        openPlanModal('account');
+                      }}
+                      className="w-full text-left px-3 py-2 text-slate-700 hover:bg-slate-55 rounded-lg flex items-center gap-2 cursor-pointer"
+                      id="dropdown-account-btn"
+                    >
+                      <User className="w-3.5 h-3.5 text-slate-400" />
+                      <span>계정</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setDropdownOpen(false);
+                        openPlanModal('plan');
+                      }}
+                      className="w-full text-left px-3 py-2 text-slate-700 hover:bg-slate-55 rounded-lg flex items-center gap-2 cursor-pointer"
+                      id="dropdown-plan-btn"
+                    >
+                      <CreditCard className="w-3.5 h-3.5 text-slate-400" />
+                      <span>플랜</span>
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <button 
+              onClick={handleLoginClick}
+              className={`text-sm font-medium cursor-pointer ${isPricingPage ? 'text-gray-900 border border-gray-200 hover:bg-gray-50 rounded-full px-5 py-2.5 bg-white shadow-sm transition-all' : 'text-gray-700 hover:text-black transition-colors px-4 py-2'}`}
+              id="header-login-btn"
+            >
+              로그인
+            </button>
+          )}
+
           {!isPricingPage && (
             <button 
               onClick={() => startDemoFlow()}
-              className="text-sm font-medium bg-[#274236] text-white px-5 py-2.5 rounded-full hover:bg-[#1C3027] transition-colors shadow-sm"
+              className="text-sm font-medium bg-[#274236] text-white px-5 py-2.5 rounded-full hover:bg-[#1C3027] transition-colors shadow-sm cursor-pointer"
+              id="header-experience-btn"
             >
               실시간 상담 체험
             </button>
@@ -60,7 +135,7 @@ const Header = () => {
         </div>
 
         <button 
-          className="md:hidden p-2 -mr-2 text-gray-600"
+          className="md:hidden p-2 -mr-2 text-gray-600 cursor-pointer"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -69,14 +144,46 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 py-4 px-6 flex flex-col gap-4 shadow-xl">
+        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 py-4 px-6 flex flex-col gap-4 shadow-xl text-left z-50">
           <Link to="/features" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>기능</Link>
           <Link to="/pricing" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>요금제</Link>
           <Link to="/guide" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>가이드 문서</Link>
           <div className="h-px bg-gray-100 my-2" />
-          <button className="w-full text-left text-lg font-medium" onClick={() => { setMobileMenuOpen(false); setCurrentFlow('login'); }}>로그인</button>
+          
+          {isLoggedIn ? (
+            <div className="space-y-3">
+              <div className="px-3.5 py-2.5 bg-slate-50 border border-slate-100 rounded-xl">
+                <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-tight">로그인한 계정</span>
+                <span className="block text-sm font-bold text-slate-750 truncate mt-0.5" title="user@example.com">user@example.com</span>
+              </div>
+              <button 
+                className="w-full text-left text-base font-bold flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg text-slate-700 cursor-pointer" 
+                onClick={() => { setMobileMenuOpen(false); openPlanModal('account'); }}
+              >
+                <User className="w-4 h-4 text-slate-400" />
+                계정 관리
+              </button>
+              <button 
+                className="w-full text-left text-base font-bold flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg text-slate-700 cursor-pointer" 
+                onClick={() => { setMobileMenuOpen(false); openPlanModal('plan'); }}
+              >
+                <CreditCard className="w-4 h-4 text-slate-400" />
+                플랜 관리
+              </button>
+              <button 
+                className="w-full text-left text-base font-bold flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg text-red-650 cursor-pointer" 
+                onClick={() => { setMobileMenuOpen(false); setIsLoggedIn(false); }}
+              >
+                <LogOut className="w-4 h-4 text-red-400" />
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <button className="w-full text-left text-lg font-medium cursor-pointer" onClick={() => { setMobileMenuOpen(false); handleLoginClick(); }}>로그인</button>
+          )}
+
           {!isPricingPage && (
-            <button className="w-full bg-[#274236] text-white text-center rounded-xl py-3 font-medium mt-2" onClick={() => { setMobileMenuOpen(false); startDemoFlow(); }}>실시간 상담 체험</button>
+            <button className="w-full bg-[#274236] text-white text-center rounded-xl py-3 font-medium mt-2 cursor-pointer" onClick={() => { setMobileMenuOpen(false); startDemoFlow(); }}>실시간 상담 체험</button>
           )}
         </div>
       )}
@@ -390,18 +497,18 @@ const FeatureItem = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6, delay }}
-      whileHover={{ y: -4, backgroundColor: hoverBg, borderColor: hoverBorder, transition: { duration: 0.15 } }}
-      className="p-8 pb-10 rounded-[1.25rem] bg-white border border-gray-200 flex flex-col h-full shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] transition-shadow group cursor-pointer"
+      whileHover={{ y: -2, backgroundColor: hoverBg, borderColor: hoverBorder, transition: { duration: 0.15 } }}
+      className="p-8 pb-10 rounded-[1.25rem] bg-white border border-gray-200 flex flex-col h-full shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] transition-all duration-150 group cursor-pointer"
     >
-      <div className={`w-11 h-11 rounded-[0.85rem] bg-[#f4f4f5] ${iconHoverBg} transition-colors flex items-center justify-center mb-8`}>
-        <Icon className={`w-[1.125rem] h-[1.125rem] text-[#18181B] ${iconHoverText} transition-colors`} strokeWidth={1.5} />
+      <div className={`w-11 h-11 rounded-[0.85rem] bg-[#f4f4f5] ${iconHoverBg} transition-colors duration-150 flex items-center justify-center mb-8`}>
+        <Icon className={`w-[1.125rem] h-[1.125rem] text-[#18181B] ${iconHoverText} transition-colors duration-150`} strokeWidth={1.5} />
       </div>
-      <h3 className={`text-[1.1rem] font-bold text-gray-900 mb-2 tracking-wide ${titleHoverText} transition-colors`}>{title}</h3>
+      <h3 className={`text-[1.1rem] font-bold text-gray-900 mb-2 tracking-wide ${titleHoverText} transition-colors duration-150`}>{title}</h3>
       <p className="text-gray-500 text-[0.95rem] leading-[1.6]">
         {description}
       </p>
       {children && (
-        <div className={`mt-8 pt-6 border-t border-gray-100 ${borderHover} flex-1 flex flex-col justify-end transition-colors`}>
+        <div className={`mt-8 pt-6 border-t border-gray-100 ${borderHover} flex-1 flex flex-col justify-end transition-colors duration-150`}>
           {children}
         </div>
       )}
@@ -424,25 +531,25 @@ const Features = () => {
             title="실시간 채팅 상담"
             description="고객과 상담원이 바로 대화하며 빠른 문의 응대를 지원합니다."
             delay={0.1}
-            hoverBg="#F4F8F5"
-            hoverBorder="#E3EBE6"
-            iconHoverBg="group-hover:bg-[#EAF0EC]"
-            iconHoverText="group-hover:text-[#184632]"
-            titleHoverText="group-hover:text-[#184632]"
-            borderHover="group-hover:border-[#E3EBE6]"
+            hoverBg="#FFFFFF"
+            hoverBorder="#9ECAD6"
+            iconHoverBg="group-hover:bg-[#ebf4f7]"
+            iconHoverText="group-hover:text-[#6da2b2]"
+            titleHoverText="group-hover:text-[#5f9eb0]"
+            borderHover="group-hover:border-[#ebf4f7]"
           >
             <div className="flex flex-col gap-2">
-              <div className="flex justify-between items-center bg-gray-50/80 rounded-lg p-2.5 border border-gray-100 group-hover:bg-white group-hover:border-[#E3EBE6] transition-colors">
+              <div className="flex justify-between items-center bg-gray-50/80 rounded-lg p-2.5 border border-gray-100 group-hover:bg-white group-hover:border-[#ebf4f7] transition-colors duration-150">
                 <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></div>
-                  <span className="text-[0.8rem] font-bold text-gray-700 group-hover:text-[#184632] transition-colors">신규 문의 도착</span>
+                  <div className="w-1.5 h-1.5 bg-[#9ECAD6] rounded-full animate-pulse"></div>
+                  <span className="text-[0.8rem] font-bold text-gray-700 group-hover:text-[#6da2b2] transition-colors duration-150">신규 문의 도착</span>
                 </div>
                 <span className="text-[0.7rem] font-bold text-gray-400">1분 전</span>
               </div>
-              <div className="flex justify-between items-center bg-gray-50/80 rounded-lg p-2.5 border border-gray-100 group-hover:bg-white group-hover:border-[#E3EBE6] transition-colors">
+              <div className="flex justify-between items-center bg-gray-50/80 rounded-lg p-2.5 border border-gray-100 group-hover:bg-white group-hover:border-[#ebf4f7] transition-colors duration-150">
                 <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
-                  <span className="text-[0.8rem] font-bold text-gray-700 group-hover:text-[#184632] transition-colors">상담 진행 중</span>
+                  <div className="w-1.5 h-1.5 bg-[#6da2b2] rounded-full"></div>
+                  <span className="text-[0.8rem] font-bold text-gray-700 group-hover:text-[#6da2b2] transition-colors duration-150">상담 진행 중</span>
                 </div>
                 <span className="text-[0.7rem] font-bold text-gray-400">상담원 박지원</span>
               </div>
@@ -453,17 +560,17 @@ const Features = () => {
             title="게시판형 문의 접수"
             description="고객은 채팅처럼 문의를 남기고 상담자는 1:1 문의로 처리합니다."
             delay={0.2}
-            hoverBg="#FCFCF9"
-            hoverBorder="#EAECE1"
-            iconHoverBg="group-hover:bg-[#F0F2E6]"
-            iconHoverText="group-hover:text-[#5E6B47]"
-            titleHoverText="group-hover:text-[#3B452B]"
-            borderHover="group-hover:border-[#E1E3D3]"
+            hoverBg="#FFFFFF"
+            hoverBorder="#748DAE"
+            iconHoverBg="group-hover:bg-[#f0f3f6]"
+            iconHoverText="group-hover:text-[#748DAE]"
+            titleHoverText="group-hover:text-[#627a98]"
+            borderHover="group-hover:border-[#f0f3f6]"
           >
             <div className="flex flex-col gap-2">
-               <div className="flex items-center gap-2 text-[0.8rem] font-bold text-gray-600 group-hover:text-[#4A5538] transition-colors p-2 rounded-lg border border-gray-100 group-hover:border-[#EAECE1] group-hover:bg-white"><div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-gray-400 group-hover:text-[#5E6B47] transition-colors">1</div> 문의 접수</div>
-               <div className="flex items-center gap-2 text-[0.8rem] font-bold text-gray-600 group-hover:text-[#4A5538] transition-colors p-2 rounded-lg border border-gray-100 group-hover:border-[#EAECE1] group-hover:bg-white"><div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-gray-400 group-hover:text-[#5E6B47] transition-colors">2</div> 답변 등록</div>
-               <div className="flex items-center gap-2 text-[0.8rem] font-bold text-gray-600 group-hover:text-[#4A5538] transition-colors p-2 rounded-lg border border-gray-100 group-hover:border-[#EAECE1] group-hover:bg-white"><div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-gray-400 group-hover:text-[#5E6B47] transition-colors">3</div> 문의창에서 확인</div>
+               <div className="flex items-center gap-2 text-[0.8rem] font-bold text-gray-600 group-hover:text-[#627a98] transition-colors duration-150 p-2 rounded-lg border border-gray-100 group-hover:border-[#f0f3f6] group-hover:bg-white"><div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-gray-400 group-hover:text-[#748DAE] transition-colors duration-150">1</div> 문의 접수</div>
+               <div className="flex items-center gap-2 text-[0.8rem] font-bold text-gray-600 group-hover:text-[#627a98] transition-colors duration-150 p-2 rounded-lg border border-gray-100 group-hover:border-[#f0f3f6] group-hover:bg-white"><div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-gray-400 group-hover:text-[#748DAE] transition-colors duration-150">2</div> 답변 등록</div>
+               <div className="flex items-center gap-2 text-[0.8rem] font-bold text-gray-600 group-hover:text-[#627a98] transition-colors duration-150 p-2 rounded-lg border border-gray-100 group-hover:border-[#f0f3f6] group-hover:bg-white"><div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-gray-400 group-hover:text-[#748DAE] transition-colors duration-150">3</div> 문의창에서 확인</div>
             </div>
           </FeatureItem>
           <FeatureItem 
@@ -471,25 +578,25 @@ const Features = () => {
             title="상담 이력 관리"
             description="상담 내용과 답변, 첨부자료를 고객별 이력으로 보관합니다."
             delay={0.3}
-            hoverBg="#F7F9F8"
-            hoverBorder="#E1E6E3"
-            iconHoverBg="group-hover:bg-[#EAF0ED]"
-            iconHoverText="group-hover:text-[#3B5246]"
-            titleHoverText="group-hover:text-[#2D4538]"
-            borderHover="group-hover:border-[#E1E6E3]"
+            hoverBg="#FFFFFF"
+            hoverBorder="#F5CBCB"
+            iconHoverBg="group-hover:bg-[#FFEAEA]"
+            iconHoverText="group-hover:text-[#d38f8f]"
+            titleHoverText="group-hover:text-[#d38f8f]"
+            borderHover="group-hover:border-[#FFEAEA]"
           >
-            <div className="space-y-3 bg-gray-50/50 rounded-xl p-3 border border-gray-100 group-hover:bg-white group-hover:border-[#E1E6E3] transition-colors">
-               <div className="flex justify-between items-center text-[0.8rem] text-gray-500 border-b border-gray-100/50 pb-2 group-hover:border-[#EBF0EE] transition-colors">
+            <div className="space-y-3 bg-gray-50/50 rounded-xl p-3 border border-gray-100 group-hover:bg-[#FFEAEA]/30 group-hover:border-[#FFEAEA] transition-colors duration-150">
+               <div className="flex justify-between items-center text-[0.8rem] text-gray-500 border-b border-gray-100/50 pb-2 group-hover:border-[#f2d8d8] transition-colors duration-150">
                   <span className="font-bold text-gray-700">이전 문의</span>
-                  <span className="truncate max-w-[100px] group-hover:text-[#3B5246] transition-colors font-medium">결제수단 변경 건</span>
+                  <span className="truncate max-w-[100px] group-hover:text-[#c47c7c] transition-colors duration-150 font-medium">결제수단 변경 건</span>
                </div>
-               <div className="flex justify-between items-center text-[0.8rem] text-gray-500 border-b border-gray-100/50 pb-2 group-hover:border-[#EBF0EE] transition-colors">
+               <div className="flex justify-between items-center text-[0.8rem] text-gray-500 border-b border-gray-100/50 pb-2 group-hover:border-[#f2d8d8] transition-colors duration-150">
                   <span className="font-bold text-gray-700">첨부자료</span>
-                  <div className="flex items-center gap-1 font-medium"><Paperclip className="w-3 h-3 text-gray-400 group-hover:text-[#3B5246] transition-colors"/>영수증.pdf</div>
+                  <div className="flex items-center gap-1 font-medium"><Paperclip className="w-3 h-3 text-gray-400 group-hover:text-[#c47c7c] transition-colors duration-150"/>영수증.pdf</div>
                </div>
                <div className="flex justify-between items-center text-[0.8rem] text-gray-500">
                   <span className="font-bold text-gray-700">처리 상태</span>
-                  <span className="px-1.5 py-0.5 bg-white border border-gray-200 rounded text-[0.7rem] font-bold text-gray-600 shadow-sm group-hover:bg-[#F0F2F1] group-hover:text-[#2D4538] group-hover:border-[#E1E6E3] transition-colors">완료됨</span>
+                  <span className="px-1.5 py-0.5 bg-white border border-gray-200 rounded text-[0.7rem] font-bold text-gray-600 shadow-sm group-hover:bg-[#FFEAEA] group-hover:text-[#c47c7c] group-hover:border-[#F5CBCB] transition-colors duration-150">완료됨</span>
                </div>
             </div>
           </FeatureItem>
@@ -1218,16 +1325,26 @@ const Footer = () => {
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-start gap-10 mb-16">
         <div>
           <Logo className="mb-6" isFooter={true} />
-          <p className="text-gray-500 max-w-xs text-sm">
+          <p className="text-gray-500 max-w-xs text-sm mb-4">
             고객 상담을 더 빠르게,<br/>문의 관리는 더 체계적으로.
           </p>
+          <p className="text-gray-600 text-xs mb-3 font-semibold">
+            GrowTalk은 주식회사 디알밸류가 제공하는 상담 채팅 솔루션입니다.
+          </p>
+          <div className="text-gray-500 text-xs space-y-1 font-normal leading-relaxed">
+            <p>운영사: 주식회사 디알밸류 | 대표자: 용미숙</p>
+            <p>사업자등록번호: 491-87-02850</p>
+            <p>주소: 경기도 안산시 상록구 한양대학로 55, 창업보육센터 318호</p>
+            <p>이메일: <a href="mailto:service@drvalue.co.kr" className="hover:text-gray-800 underline">service@drvalue.co.kr</a></p>
+          </div>
         </div>
         <div className="flex flex-wrap gap-12 md:gap-24">
           <div>
             <h4 className="font-bold text-gray-900 mb-6 tracking-tight text-sm">제품</h4>
             <ul className="space-y-4 text-sm text-gray-500 font-medium">
-              <li><a href="/#solution-board" className="hover:text-gray-900 transition-colors">게시판형 채팅 솔루션</a></li>
-              <li><a href="/#solution-realtime" className="hover:text-gray-900 transition-colors">실시간 채팅 솔루션</a></li>
+              <li><Link to="/features" className="hover:text-gray-900 transition-colors">기능 소개</Link></li>
+              <li><Link to="/features#board-chat" className="hover:text-gray-900 transition-colors">게시판형 채팅 솔루션</Link></li>
+              <li><Link to="/features#realtime-chat" className="hover:text-gray-900 transition-colors">실시간 채팅 솔루션</Link></li>
               <li><Link to="/pricing" className="hover:text-gray-900 transition-colors">요금제</Link></li>
             </ul>
           </div>
@@ -1242,15 +1359,17 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-gray-900 mb-6 tracking-tight text-sm">회사</h4>
             <ul className="space-y-4 text-sm text-gray-500 font-medium">
-              <li><a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo(0, 0); }} className="hover:text-gray-900 transition-colors">서비스 소개</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-gray-900 transition-colors">이용약관</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-gray-900 transition-colors">개인정보처리방침</a></li>
+              <li><Link to="/" className="hover:text-gray-900 transition-colors">서비스 소개</Link></li>
+              <li><Link to="/terms" className="hover:text-gray-900 transition-colors">이용약관</Link></li>
+              <li><Link to="/privacy" className="hover:text-gray-900 transition-colors">개인정보처리방침</Link></li>
+              <li><Link to="/terms#email-policy" className="hover:text-gray-900 transition-colors">이메일무단수집거부</Link></li>
+              <li><Link to="/sitemap" className="hover:text-gray-900 transition-colors">사이트맵</Link></li>
             </ul>
           </div>
         </div>
       </div>
       <div className="max-w-[1400px] mx-auto pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-        <p>© {new Date().getFullYear()} GrowTalk Inc. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} 주식회사 디알밸류. All rights reserved.</p>
       </div>
     </footer>
   );
@@ -1269,27 +1388,33 @@ const LandingPage = () => {
 };
 
 import { FlowContext, FlowModals, FlowType } from './components/FlowModals';
+import { PlanManagerModal } from './components/PlanManagerModal';
 
 export default function App() {
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentFlow, setCurrentFlow] = useState<FlowType>('none');
   const [pendingFlow, setPendingFlow] = useState<FlowType>('none');
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   
+  // Custom Plan Management states
+  const [currentPlan, setCurrentPlan] = useState<'free' | 'subscribed'>('subscribed');
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
+  const [planModalInitialTab, setPlanModalInitialTab] = useState<'plan' | 'account'>('plan');
+  const [planModalMode, setPlanModalMode] = useState<'settings' | 'free' | 'subscribed'>('settings');
+
   const location = useLocation();
   const isExperiencePage = location.pathname === '/experience';
 
   const startBoardFlow = () => {
-    if (isLoggedIn) {
-      setCurrentFlow('board-create');
-    } else {
-      setPendingFlow('board-create');
-      setCurrentFlow('login');
-    }
+    setIsLoggedIn(true);
+    setPlanModalMode('free');
+    setPlanModalInitialTab('plan');
+    setIsPlanModalOpen(true);
   };
 
   const startDemoFlow = () => {
-    window.open('/experience', '_blank');
+    navigate('/experience');
   };
 
   const startEnterpriseFlow = () => {
@@ -1297,12 +1422,16 @@ export default function App() {
   };
 
   const startSubscribeFlow = () => {
-    if (isLoggedIn) {
-      setCurrentFlow('subscribe');
-    } else {
-      setPendingFlow('subscribe');
-      setCurrentFlow('login');
-    }
+    setIsLoggedIn(true);
+    setPlanModalMode('subscribed');
+    setPlanModalInitialTab('plan');
+    setIsPlanModalOpen(true);
+  };
+
+  const openPlanModal = (tab: 'plan' | 'account') => {
+    setPlanModalMode('settings');
+    setPlanModalInitialTab(tab);
+    setIsPlanModalOpen(true);
   };
 
   return (
@@ -1311,7 +1440,9 @@ export default function App() {
       currentFlow, setCurrentFlow,
       pendingFlow, setPendingFlow,
       startBoardFlow, startDemoFlow, startEnterpriseFlow, startSubscribeFlow,
-      isWidgetOpen, setIsWidgetOpen
+      isWidgetOpen, setIsWidgetOpen,
+      currentPlan, setCurrentPlan,
+      openPlanModal
     }}>
       <div className="min-h-screen font-sans selection:bg-[#E8ECE5]">
         {!isExperiencePage && <Header />}
@@ -1329,6 +1460,23 @@ export default function App() {
             <FlowModals />
           </>
         )}
+
+        {/* Plan & Account settings Modal */}
+        <AnimatePresence>
+          {isPlanModalOpen && (
+            <PlanManagerModal
+              isOpen={isPlanModalOpen}
+              onClose={() => setIsPlanModalOpen(false)}
+              currentPlan={currentPlan}
+              setCurrentPlan={setCurrentPlan}
+              initialTab={planModalInitialTab}
+              checkoutMode={planModalMode}
+              setCheckoutMode={setPlanModalMode}
+            />
+          )}
+        </AnimatePresence>
+
+
       </div>
     </FlowContext.Provider>
   );

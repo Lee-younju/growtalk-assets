@@ -338,27 +338,11 @@ export const FloatingWidget = () => {
 
   return (
     <>
-      <AnimatePresence>
-        {showTopButton && (
-          <motion.button
-            onClick={scrollToTop}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-[96px] right-6 z-40 w-11 h-11 bg-white border border-gray-200 shadow-sm hover:shadow-md rounded-full text-gray-500 hover:text-gray-900 transition-all font-medium hidden md:flex items-center justify-center"
-            aria-label="최상단으로 이동"
-          >
-            <ArrowUp className="w-5 h-5" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
-        className="fixed bottom-6 right-6 z-50 flex flex-col items-end"
+        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 flex flex-col items-end gap-2.5 md:gap-3"
       >
         <AnimatePresence>
           {isWidgetOpen && (
@@ -412,14 +396,45 @@ export const FloatingWidget = () => {
           )}
         </AnimatePresence>
 
-        <button
-          onClick={handleOpen}
-          className={`relative bg-gray-900 text-white px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl hover:bg-black transition-all hover:-translate-y-1 font-bold text-[0.95rem] gap-2.5 z-50 ${isWidgetOpen ? 'hidden md:flex' : 'flex items-center'}`}
-        >
-          {!isWidgetOpen && <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white translate-x-0 -translate-y-0.5"></span>}
-          {isWidgetOpen ? <X className="w-5 h-5"/> : <MessageSquare className="w-5 h-5" />}
-          {isWidgetOpen ? '닫기' : '문의 남기기'}
-        </button>
+        {/* Inquiry Circular Button with Hover Badge */}
+        <div className="relative group z-50">
+          <div className="absolute right-[76px] top-1/2 -translate-y-1/2 whitespace-nowrap bg-white text-slate-900 px-3.5 py-2 rounded-xl shadow-lg border border-gray-100 text-xs md:text-sm font-semibold tracking-tight opacity-0 pointer-events-none group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all duration-200 origin-right hidden md:block select-none">
+            문의 남기기 ☺
+          </div>
+
+          <button
+            onClick={handleOpen}
+            className={`w-[52px] h-[52px] md:w-[60px] md:h-[60px] rounded-full bg-[#0F172A] hover:bg-black text-white flex items-center justify-center shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative ${isWidgetOpen ? 'hidden md:flex shrink-0' : 'flex shrink-0'}`}
+          >
+            {isWidgetOpen ? (
+              <X className="w-6 h-6 text-white"/>
+            ) : (
+              <img 
+                src="https://raw.githubusercontent.com/Lee-younju/growtalk-assets/main/Growtalk_logo3.png" 
+                alt="GrowTalk Logo" 
+                className="w-8 h-8 md:w-10 md:h-10 object-contain rounded-full"
+                referrerPolicy="no-referrer"
+              />
+            )}
+          </button>
+        </div>
+
+        {/* Scroll To Top Button */}
+        <AnimatePresence>
+          {showTopButton && (
+            <motion.button
+              onClick={scrollToTop}
+              initial={{ opacity: 0, scale: 0.8, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 10 }}
+              transition={{ duration: 0.2 }}
+              className="hidden lg:flex w-12 h-12 md:w-[52px] md:h-[52px] bg-[#0F172A] hover:bg-black text-white rounded-full items-center justify-center shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 shrink-0 cursor-pointer"
+              aria-label="최상단으로 이동"
+            >
+              <ArrowUp className="w-5 h-5" />
+            </motion.button>
+          )}
+        </AnimatePresence>
       </motion.div>
     </>
   );

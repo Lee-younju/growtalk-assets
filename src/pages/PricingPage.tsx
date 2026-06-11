@@ -53,12 +53,14 @@ export const PricingPage = () => {
                 </li>
               </ul>
             </div>
-            <button 
-              onClick={() => startBoardFlow()}
-              className="w-full py-3.5 rounded-xl border border-gray-200 bg-white text-gray-900 text-[0.95rem] font-bold hover:bg-gray-50 transition-colors shadow-sm"
-            >
-              무료로 시작하기
-            </button>
+            <div className="mt-auto pt-6 flex flex-col gap-3">
+              <button 
+                onClick={() => startBoardFlow()}
+                className="w-full py-3.5 rounded-xl border border-gray-200 bg-white text-gray-900 text-[0.95rem] font-bold hover:bg-gray-50 transition-colors shadow-sm"
+              >
+                무료로 시작하기
+              </button>
+            </div>
           </div>
 
           {/* Realtime (Recommended) */}
@@ -94,7 +96,7 @@ export const PricingPage = () => {
                 </li>
               </ul>
             </div>
-            <div className="flex flex-col gap-2.5">
+            <div className="mt-auto pt-6 flex flex-col gap-3">
               <button 
                 onClick={() => startSubscribeFlow()}
                 className="w-full py-3.5 rounded-xl bg-emerald-600 text-white text-[0.95rem] font-bold hover:bg-emerald-700 transition-colors shadow-sm"
@@ -137,27 +139,15 @@ export const PricingPage = () => {
                 </li>
               </ul>
             </div>
-            <button 
-              onClick={() => startEnterpriseFlow()}
-              className="w-full py-3.5 rounded-xl border border-gray-200 bg-white text-gray-900 text-[0.95rem] font-bold hover:bg-gray-50 transition-colors shadow-sm"
-            >
-              도입 문의하기
-            </button>
+            <div className="mt-auto pt-6 flex flex-col gap-3">
+              <button 
+                onClick={() => startEnterpriseFlow()}
+                className="w-full py-3.5 rounded-xl border border-gray-200 bg-white text-gray-900 text-[0.95rem] font-bold hover:bg-gray-50 transition-colors shadow-sm"
+              >
+                도입 문의하기
+              </button>
+            </div>
           </div>
-        </div>
-
-        {/* Custom Introduction Bar */}
-        <div className="bg-white rounded-[1.25rem] p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between border border-black/[0.06] shadow-[0_4px_16px_-4px_rgba(0,0,0,0.02)] mb-20 gap-6">
-          <div className="text-center md:text-left">
-            <h5 className="text-[1.1rem] font-bold text-gray-900 mb-1">기업 맞춤 도입이 필요하신가요?</h5>
-            <p className="text-[0.95rem] text-gray-500 font-medium">운영 방식, 권한 구조, 구축 범위까지 맞춤 상담이 가능합니다.</p>
-          </div>
-          <button 
-            onClick={() => startEnterpriseFlow()}
-            className="w-full md:w-auto px-6 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-[0.95rem] font-bold hover:bg-gray-50 transition-colors shadow-sm shrink-0 whitespace-nowrap"
-          >
-            도입 문의하기
-          </button>
         </div>
 
         {/* Comparison Tables */}

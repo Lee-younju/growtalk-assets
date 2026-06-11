@@ -17,6 +17,9 @@ interface FlowContextType {
   startSubscribeFlow: () => void;
   isWidgetOpen: boolean;
   setIsWidgetOpen: (v: boolean) => void;
+  currentPlan: 'free' | 'subscribed';
+  setCurrentPlan: (plan: 'free' | 'subscribed') => void;
+  openPlanModal: (tab: 'plan' | 'account') => void;
 }
 
 export const FlowContext = React.createContext<FlowContextType>({} as FlowContextType);
