@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Search, ChevronRight, ChevronDown, FileText, LayoutDashboard, Settings, HelpCircle, MessageSquare, CreditCard, Check, X, Clock } from 'lucide-react';
+import { Search, ChevronRight, ChevronDown, FileText, LayoutDashboard, Settings, HelpCircle, MessageSquare, CreditCard, Check, X, Clock, Send, Smartphone, History, UserCheck, BookOpen } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const SIDEBAR_MENU = [
@@ -142,7 +142,7 @@ export const GuidePage = () => {
       const sections = [
         'first-inquiry', 'customer-widget', 'prepare-inquiry', 'test-inquiry', 'reply-test',
         'section-1', 'section-2', 'section-3', 'section-4', 'section-5', 'section-6', 'section-7',
-        'intro', 'customer-flow', 'write-inquiry', 'answer-check', 'agent-reply', 'customer', 'agent', 'start', 'features', 'end', 'try', 'next',
+        'intro', 'customer-flow', 'write-inquiry', 'customer-start', 'agent-response', 'answer-check', 'agent-reply', 'customer', 'agent', 'start', 'features', 'history', 'end', 'try', 'next',
         'list', 'detail', 'reply', 'status', 'search',
         'channel', 'inquiry-type', 'input-fields', 'permissions', 'checklist',
         'pricing', 'subscribe', 'payment-sample', 'setup', 'install-code',
@@ -316,13 +316,12 @@ export const GuidePage = () => {
             {activeItem === '실시간 채팅 상담' && (
               <ul className="space-y-3 text-[0.85rem] text-gray-500">
                 <li><a href="#intro" className={`hover:text-blue-600 transition-colors ${activeSection === 'intro' ? 'text-blue-600 font-semibold' : ''}`}>1. 실시간 채팅 상담이란?</a></li>
-                <li><a href="#customer" className={`hover:text-blue-600 transition-colors ${activeSection === 'customer' ? 'text-blue-600 font-semibold' : ''}`}>2. 고객에게는 이렇게 보입니다</a></li>
-                <li><a href="#agent" className={`hover:text-blue-600 transition-colors ${activeSection === 'agent' ? 'text-blue-600 font-semibold' : ''}`}>3. 상담 담당자는 이렇게 응대합니다</a></li>
-                <li><a href="#start" className={`hover:text-blue-600 transition-colors ${activeSection === 'start' ? 'text-blue-600 font-semibold' : ''}`}>4. 실시간 상담 시작하기</a></li>
-                <li><a href="#features" className={`hover:text-blue-600 transition-colors ${activeSection === 'features' ? 'text-blue-600 font-semibold' : ''}`}>5. 상담 중 사용할 수 있는 기능</a></li>
-                <li><a href="#end" className={`hover:text-blue-600 transition-colors ${activeSection === 'end' ? 'text-blue-600 font-semibold' : ''}`}>6. 상담 종료와 이력 확인</a></li>
-                <li><a href="#try" className={`hover:text-blue-600 transition-colors ${activeSection === 'try' ? 'text-blue-600 font-semibold' : ''}`}>7. 실시간 상담 체험으로 미리 확인하기</a></li>
-                <li><a href="#next" className={`hover:text-blue-600 transition-colors ${activeSection === 'next' ? 'text-blue-600 font-semibold' : ''}`}>8. 다음에 볼 문서</a></li>
+                <li><a href="#customer-start" className={`hover:text-blue-600 transition-colors ${activeSection === 'customer-start' ? 'text-blue-600 font-semibold' : ''}`}>2. 고객은 어떻게 상담을 시작하나요?</a></li>
+                <li><a href="#agent-response" className={`hover:text-blue-600 transition-colors ${activeSection === 'agent-response' ? 'text-blue-600 font-semibold' : ''}`}>3. 상담 담당자는 어떻게 응대하나요?</a></li>
+                <li><a href="#features" className={`hover:text-blue-600 transition-colors ${activeSection === 'features' ? 'text-blue-600 font-semibold' : ''}`}>4. 상담 중 사용할 수 있는 기능</a></li>
+                <li><a href="#history" className={`hover:text-blue-600 transition-colors ${activeSection === 'history' ? 'text-blue-600 font-semibold' : ''}`}>5. 상담 종료와 이력 확인</a></li>
+                <li><a href="#try" className={`hover:text-blue-600 transition-colors ${activeSection === 'try' ? 'text-blue-600 font-semibold' : ''}`}>6. 실시간 상담 체험으로 미리 확인하기</a></li>
+                <li><a href="#next" className={`hover:text-blue-600 transition-colors ${activeSection === 'next' ? 'text-blue-600 font-semibold' : ''}`}>7. 다음에 볼 문서</a></li>
               </ul>
             )}
             {activeItem === '문의 관리' && (
@@ -1036,85 +1035,14 @@ const BoardChatDoc = ({ setActiveItem }: { setActiveItem: (item: string) => void
               <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center text-[14px] font-bold shrink-0 shadow-sm">4</div>
               <div>
                 <h5 className="font-bold text-slate-950 text-[14.5px] mb-0.5">답변 확인</h5>
-                <p className="text-[12.5px] text-slate-500 m-0">피드백 내용 정독</p>
+                <p className="text-[12.5px] text-slate-500 m-0">피드백과 답변 정독</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 흐름 항목 설명 카드 - 24~28px 시각 칩 탑재 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-          <div className="p-6 bg-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between h-full">
-            <div>
-              <h4 className="font-bold text-slate-950 text-[16px] mb-3 flex items-center gap-3">
-                <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[13.5px] font-bold shrink-0">1</span>
-                문의 시작하기
-              </h4>
-              <p className="text-[14.5px] text-slate-600 leading-[1.65]">
-                고객이 사이트 우측 하단에 편중된 플로팅 문의 수급 버튼을 눌러 직관적이고 편안한 전용 모달식 문의 접수 창을 실행시킵니다.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-6 bg-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between h-full">
-            <div>
-              <h4 className="font-bold text-slate-950 text-[16px] mb-3 flex items-center gap-3">
-                <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[13.5px] font-bold shrink-0">2</span>
-                문의 내용 작성
-              </h4>
-              <p className="text-[14.5px] text-slate-600 leading-[1.65]">
-                설정해 둔 최적의 문의 대분류(이용 문의, 계약, AS 등)를 고르고 고유 성명, 메신저 및 회신처 이메일을 빈칸 없이 채워 넣습니다.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-6 bg-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between h-full">
-            <div>
-              <h4 className="font-bold text-slate-950 text-[16px] mb-3 flex items-center gap-3">
-                <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[13.5px] font-bold shrink-0">3</span>
-                문의 등록
-              </h4>
-              <p className="text-[14.5px] text-slate-600 leading-[1.65]">
-                담아 낸 요구 요소를 확인한 뒤 등록 누름과 동시에 당사 클라우드 데이터베이스에 연동되어 접수 알람 대기창으로 전환됩니다.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-6 bg-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between h-full">
-            <div>
-              <h4 className="font-bold text-slate-950 text-[16px] mb-3 flex items-center gap-3">
-                <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[13.5px] font-bold shrink-0">4</span>
-                답변 확인
-              </h4>
-              <p className="text-[14.5px] text-slate-600 leading-[1.65]">
-                상담 담당 멤버가 대쉬보드 내역을 파악 후 기입해 올리면 고객은 동일 웹에 복귀하는 과정에서 고스란히 답장을 취사할 수 있습니다.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* 임베디드 예시 UI - 실제 GrowTalk 실시간 플로팅 단추처럼 비주얼라이징 개선 */}
-        <div className="bg-slate-50 border border-slate-200/70 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-around gap-8 relative overflow-hidden">
-          <div className="absolute top-2 left-3">
-            <span className="text-[11.5px] font-bold text-slate-400 tracking-widest uppercase">PREVIEW TEST BED</span>
-          </div>
-
-          {/* 실제 느낌의 플로팅 버튼 인터랙티브 목업 */}
-          <div className="flex flex-col items-center gap-3">
-            <span className="text-[13px] font-bold text-slate-500 bg-slate-200/70 px-2.5 py-1 rounded">실제 플로팅 동작 단추</span>
-            <div className="relative group cursor-pointer flex items-center gap-2">
-              <div className="bg-white text-slate-800 font-bold text-[13.5px] px-3.5 py-2 rounded-full shadow-md border border-slate-200/50 flex items-center gap-1.5 hover:shadow-lg transition-all animate-bounce">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                실시간 문의하기
-              </div>
-              <div className="w-[56px] h-[56px] rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-xl flex items-center justify-center text-white cursor-pointer hover:scale-105 active:scale-95 transition-all relative">
-                <MessageSquare className="w-6 h-6 animate-pulse" />
-                <span className="absolute -top-1 -right-0.5 w-5 h-5 bg-red-500 text-white font-bold text-[11px] flex items-center justify-center rounded-full border-2 border-white shadow-sm">1</span>
-              </div>
-            </div>
-          </div>
-          
-          {/* 가이드창 목업도 고유 가독성 디테일 적용 */}
+        {/* 가이드창 목업도 고유 가독성 디테일 적용 */}
+        <div className="flex justify-center mb-6">
           <div className="w-[310px] bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex flex-col transition-all hover:shadow-2xl">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4.5 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
@@ -1235,95 +1163,59 @@ const BoardChatDoc = ({ setActiveItem }: { setActiveItem: (item: string) => void
 
         {/* 상태 설명 3단 카드 구성 - 텍스트 마이크로화 완전 퇴출 */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-6">
-          <div className="p-6 bg-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between h-full">
-            <div>
-              <span className="inline-block text-[12px] px-2.5 py-1 font-bold rounded-lg bg-blue-50 text-blue-700 mb-3 border border-blue-100">상태 1</span>
-              <h4 className="font-bold text-slate-950 text-[16.5px] mb-2.5">접수 완료</h4>
-              <p className="text-[14.5px] text-slate-650 leading-[1.65]">
-                고객이 보낸 질문지가 데이터베이스에 잘 등록되어, 배정 전 상태를 유지하고 있음을 안내해 줍니다.
-              </p>
-            </div>
+          <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-slate-350 transition-colors">
+            <h4 className="font-bold text-slate-950 text-base mb-2.5 flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-orange-400"></span>
+              접수 및 대기
+            </h4>
+            <p className="text-[14.5px] text-slate-650 leading-relaxed">
+              고객이 문의를 성공적으로 발송하여 데이터베이스에 조치 대기로 안전하게 봉인된 최초 진입 상태입니다.
+            </p>
           </div>
 
-          <div className="p-6 bg-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md hover:border-amber-200 transition-all flex flex-col justify-between h-full">
-            <div>
-              <span className="inline-block text-[12px] px-2.5 py-1 font-bold rounded-lg bg-amber-50 text-amber-700 mb-3 border border-amber-100">상태 2</span>
-              <h4 className="font-bold text-slate-950 text-[16.5px] mb-2.5">답변 대기</h4>
-              <p className="text-[14.5px] text-slate-650 leading-[1.65]">
-                담당자에게 인계되어 글이 정독되었거나, 답변 피드백 구성을 조율 중인 시점입니다.
-              </p>
-            </div>
+          <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-slate-350 transition-colors">
+            <h4 className="font-bold text-slate-950 text-base mb-2.5 flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+              확인 중
+            </h4>
+            <p className="text-[14.5px] text-slate-650 leading-relaxed">
+              상담 담당자가 관리단 대시보드 화면에 접속해 현재 문제의 경위와 정체 맥락을 활발히 검토하고 조율 중인 단계입니다.
+            </p>
           </div>
 
-          <div className="p-6 bg-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md hover:border-emerald-200 transition-all flex flex-col justify-between h-full">
-            <div>
-              <span className="inline-block text-[12px] px-2.5 py-1 font-bold rounded-lg bg-emerald-50 text-emerald-700 mb-3 border border-emerald-100">상태 3</span>
-              <h4 className="font-bold text-slate-950 text-[16.5px] mb-2.5">답변 완료</h4>
-              <p className="text-[14.5px] text-slate-650 leading-[1.65]">
-                답장이 정식 등록되어, 재접속한 사용자가 해당 말풍선이나 상세를 즉시 조회하고 받아들이는 완료 단계입니다.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* 상태 확인 안내 가상 뷰박스 (시각 흐름) */}
-        <div className="bg-slate-50 border border-slate-200/60 rounded-2xl p-6 mb-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-white p-6 rounded-2xl border border-slate-200/50 shadow-sm flex flex-col items-center text-center h-full justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-[14px] mb-3 mx-auto shadow-sm">접수</div>
-                <h4 className="text-[15px] font-bold text-slate-950 mb-2">문의가 접수되었습니다</h4>
-                <p className="text-[13.5px] text-slate-600 leading-[1.55] m-0">접수 일시와 문의 고유 번호가 발급되며 정상 안착된 상태입니다.</p>
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-2xl border border-slate-200/50 shadow-sm flex flex-col items-center text-center h-full justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-[14px] mb-3 mx-auto shadow-sm">대기</div>
-                <h4 className="text-[15px] font-bold text-slate-950 mb-2">담당자가 확인 중입니다</h4>
-                <p className="text-[13.5px] text-slate-600 leading-[1.55] m-0">상담 담당자가 배정되었으며, 내용을 정독하고 답변을 입력 중인 상태입니다.</p>
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-2xl border border-slate-200/50 shadow-sm flex flex-col items-center text-center h-full justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[14px] mb-3 mx-auto shadow-sm">완료</div>
-                <h4 className="text-[15px] font-bold text-slate-950 mb-2">답변이 완료되었습니다</h4>
-                <p className="text-[13.5px] text-slate-600 leading-[1.55] m-0">작성이 끝난 피드백이 실시간 동기화되어 말풍선으로 정식 표시됩니다.</p>
-              </div>
-            </div>
+          <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-slate-350 transition-colors">
+            <h4 className="font-bold text-slate-950 text-base mb-2.5 flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              답변 완료
+            </h4>
+            <p className="text-[14.5px] text-slate-650 leading-relaxed">
+              안내가 수록 완료되어 사용자가 플로팅 위젯의 일대일 대화 창을 열고 완성도 높은 답변을 실시간으로 보는 완료 상태입니다.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Section 5 */}
-      <section id="member-guest" className="mb-14 scroll-mt-[120px] guide-section">
-        <h2 className="text-2xl font-bold text-slate-950 mb-5 pb-2 border-b border-gray-100">5. 회원과 비회원 문의 확인 방식</h2>
+      <section id="section-4" className="mb-14 scroll-mt-[120px] guide-section">
+        <h2 className="text-2xl font-bold text-slate-950 mb-5 pb-2 border-b border-gray-100">5. 회원/비회원 문의 확인 방식</h2>
         <p className="text-[15.5px] text-slate-705 leading-[1.75] mb-6">
-          회원과 비회원이 소통 시 전용 윈도우는 완벽히 결을 같이 합니다. 유일한 마찰은 이전 일람을 불러오고 보존을 영위하는 데이터 범위의 설계 차이입니다.
+          GrowTalk은 계정이 연동되지 않은 비회원 상태라 할지라도 문의 이력을 안전하게 조회하고 추적할 수 있도록 지원합니다. 로그인 상태에 따른 세부 특징은 다음과 같습니다.
         </p>
 
-        {/* 2열 비교 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between h-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <div className="p-6 bg-white border border-slate-200/60 rounded-2xl shadow-sm flex flex-col justify-between h-full">
             <div>
-              <h3 className="font-bold text-slate-950 text-[16.5px] mb-4 flex items-center gap-2.5">
-                <span className="px-3 py-1 rounded bg-blue-100 text-blue-700 text-[12px] font-bold">회원</span>
-                회원으로 문의한 경우
-              </h3>
-              <ul className="space-y-3.5 text-[14.5px] text-slate-700 leading-relaxed">
-                <li className="flex items-start gap-2"><Check className="w-4 h-4 text-blue-600 shrink-0 mt-1" /> 로그인 후 이용에 적격합성을 검증</li>
-                <li className="flex items-start gap-2"><Check className="w-4 h-4 text-blue-600 shrink-0 mt-1" /> 데스크톱 / 스마트폰 등 어느 단말기에서도 자신의 이력 풀 서치</li>
-                <li className="flex items-start gap-2"><Check className="w-4 h-4 text-blue-600 shrink-0 mt-1" /> 계정(Account) 고유 정보에 엮여 영구히 이력 수임 보존</li>
-              </ul>
+              <h4 className="font-bold text-slate-950 text-[16px] mb-3">회원 전용 세션</h4>
+              <p className="text-[14.5px] text-slate-650 leading-relaxed mb-4">
+                브랜드 도메인의 통합 소셜 로그인이나 정식 가입을 마친 고객입니다. 평생 안전한 DB 조회 및 누적된 질답 이정표를 보존합니다.
+              </p>
             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all flex flex-col justify-between h-full">
+          <div className="p-6 bg-white border border-slate-200/60 rounded-2xl shadow-sm flex flex-col justify-between h-full">
             <div>
-              <h3 className="font-bold text-slate-950 text-[16.5px] mb-4 flex items-center gap-2.5">
-                <span className="px-3 py-1 rounded bg-gray-100 text-gray-700 text-[12px] font-bold">비회원</span>
-                비회원으로 문의한 경우
-              </h3>
-              <ul className="space-y-3.5 text-[14.5px] text-slate-700 leading-relaxed">
+              <h4 className="font-bold text-slate-950 text-[16px] mb-3">비회원 전용 세션</h4>
+              <ul className="space-y-2 text-[14px] text-slate-650 leading-relaxed">
                 <li className="flex items-start gap-2"><Check className="w-4 h-4 text-indigo-500 shrink-0 mt-1" /> 번잡한 소셜 로그인 없이 1초만에 다이렉트로 문의 작성</li>
                 <li className="flex items-start gap-2"><Check className="w-4 h-4 text-indigo-500 shrink-0 mt-1" /> 브라우저 로컬 스토리지에 한시 박제되어 현재 사용 기기에서 확인</li>
                 <li className="flex items-start gap-2"><Check className="w-4 h-4 text-indigo-500 shrink-0 mt-1" /> 기기가 바뀌거나 캐시 메모리가 청소되면 이력 식별 조회 제한</li>
@@ -1336,6 +1228,7 @@ const BoardChatDoc = ({ setActiveItem }: { setActiveItem: (item: string) => void
           💡 <strong>운영진 안내 ∙</strong> 비회원 전용 세션은 브라우저 쿠키 소거 시 소실 염려가 있으므로 장기 제휴 및 단가가 높은 딜러들과 연합해야 할 경우 가급적 로그인 가입 권장을 적극 독려하시기 바랍니다.
         </div>
       </section>
+
 
       {/* Section 6 */}
       <section id="agent-reply" className="mb-14 scroll-mt-[120px] guide-section">
@@ -1451,22 +1344,23 @@ const LiveChatDoc = ({ setActiveItem }: { setActiveItem: (item: string) => void 
       </div>
       
       <p className="text-[0.95rem] text-gray-600 leading-relaxed mb-12">
-        상담 담당자가 메신저에 접속해 있는 동안, 사이트 방문자와 즉시 대화를 나눌 수 있는 상담 방식입니다. 구매 직전 문의, 긴급 상담, 빠른 응대가 필요한 상황에 적합합니다.
+        상담 담당자가 대기 중인 동안 사이트 방문자와 즉시 대화를 나눌 수 있는 최고 효율의 실시간 소통 채널입니다. 긴급 확인, 상담 연결성 및 확실한 클로징이 필요한 비즈니스 협의에 추천합니다.
       </p>
 
       {/* Section 1 */}
-      <section id="role" className="mb-14 scroll-mt-24 guide-section">
-        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">1. 고객과 상담 담당자의 역할</h2>
+      <section id="intro" className="mb-14 scroll-mt-[120px] guide-section">
+        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">1. 실시간 채팅 상담이란?</h2>
         <p className="text-[0.95rem] text-gray-600 leading-relaxed mb-6">
-          실시간 채팅은 동일한 시간에 고객과 담당자가 연결되어 빠르고 직접적으로 문제를 해결하는 채널입니다.
+          실시간 채팅은 동일 시간대에 고객과 담당자가 직접적으로 쌍방향 소통하며 신속히 응대하는 강력한 솔루션입니다.
+          비동기식 게시판 채팅과는 다르게, 실시간 매칭이 이뤄진 기점부터 채팅창에서 곧바로 일대일 집중 상담이 실시됩니다.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
-            <h3 className="font-bold text-gray-900 text-[1rem] mb-3 flex items-center gap-2">
+            <h3 className="font-bold text-gray-900 text-[16px] mb-3 flex items-center gap-2">
                🖥️ 데스크탑/모바일 고객
             </h3>
-            <ul className="text-[0.9rem] text-gray-600 leading-relaxed space-y-2 list-disc list-inside">
+            <ul className="text-[14.5px] text-gray-650 leading-relaxed space-y-2 list-disc list-inside">
               <li>사이트에 접속해 플로팅 버튼 클릭</li>
               <li>상담 담당자가 온라인일 경우 실시간 채팅 시작</li>
               <li>궁금한 점을 메신저처럼 즉시 대화</li>
@@ -1474,61 +1368,199 @@ const LiveChatDoc = ({ setActiveItem }: { setActiveItem: (item: string) => void 
             </ul>
           </div>
           <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-5">
-            <h3 className="font-bold text-blue-900 text-[1rem] mb-3 flex items-center gap-2">
-               🎧 상담 담당자 (운영자)
+            <h3 className="font-bold text-blue-900 text-[16px] mb-3 flex items-center gap-2">
+               🎧 상담 담당자
             </h3>
-            <ul className="text-[0.9rem] text-gray-600 leading-relaxed space-y-2 list-disc list-inside">
-              <li>"실시간 상담 가능" 상태로 전환하여 대기</li>
-              <li>새로운 대화 요청 시 알람 수신</li>
-              <li>채팅방에 입장하여 즉시 응대</li>
-              <li>응대 완료 후 대화를 종료하고 내부 메모 작성</li>
+            <ul className="text-[14.5px] text-gray-650 leading-relaxed space-y-2 list-disc list-inside">
+              <li>대시보드에서 '실시간 상담 가능' 전환 대기</li>
+              <li>알림음과 동시에 들어온 요청방 확인 및 진입</li>
+              <li>참여하여 고객 요청에 명쾌히 양방향 피드백</li>
+              <li>상담을 종료하고 관련 핵심 사항 내부 정리</li>
             </ul>
           </div>
         </div>
       </section>
 
       {/* Section 2 */}
-      <section id="features" className="mb-14 scroll-mt-24 guide-section">
-        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">2. 실시간 상담 시 제공되는 기능</h2>
+      <section id="customer-start" className="mb-14 scroll-mt-[120px] guide-section">
+        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">2. 고객은 어떻게 상담을 시작하나요?</h2>
         <p className="text-[0.95rem] text-gray-600 leading-relaxed mb-6">
-          상담의 퀄리티를 높이고 빠르고 편하게 응대할 수 있도록 다양한 기능을 제공합니다.
+          인위적인 절차나 불필요한 번거로움 없이 고객이 채널의 흐름을 시작하는 과정은 다음과 같이 직관적입니다.
         </p>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-4 bg-white border border-gray-200 rounded-xl shadow-sm flex items-start gap-3">
-            <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center shrink-0">💬</div>
+        <div className="space-y-4">
+          <div className="flex gap-4 p-5 bg-white border border-gray-200 rounded-xl shadow-xs">
+            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center shrink-0 text-sm">1</div>
             <div>
-              <h4 className="font-bold text-gray-900 text-[0.9rem] mb-1">채팅 및 파일 전송</h4>
-              <p className="text-[0.8rem] text-gray-500 leading-relaxed">텍스트 메시지는 물론 이미지나 문서 파일을 주고받을 수 있습니다.</p>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1">상담 위젯 활성화</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">
+                도메인 화면 우측 하단의 플로팅 아이콘을 누르면, 현재 개설되어 운영 중인 소통 창이 부드러운 모션과 함께 열립니다.
+              </p>
             </div>
           </div>
-          <div className="p-4 bg-white border border-gray-200 rounded-xl shadow-sm flex items-start gap-3">
-            <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center shrink-0">👥</div>
+          <div className="flex gap-4 p-5 bg-white border border-gray-200 rounded-xl shadow-xs">
+            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center shrink-0 text-sm">2</div>
             <div>
-              <h4 className="font-bold text-gray-900 text-[0.9rem] mb-1">고객 정보 및 이전 이력 조회</h4>
-              <p className="text-[0.8rem] text-gray-500 leading-relaxed">대화창 옆에서 바로 해당 고객의 누적 문의 이력을 파악할 수 있습니다.</p>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1">실시간 대화 버튼 선택</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">
+                게시물 형태의 비동기 접수와 다른 '실시간 일대일 채팅 상담 시작' 전용 버튼을 선택하여 바로 세션을 형성합니다.
+              </p>
             </div>
           </div>
-          <div className="p-4 bg-white border border-gray-200 rounded-xl shadow-sm flex items-start gap-3">
-            <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center shrink-0">🔄</div>
+          <div className="flex gap-4 p-5 bg-white border border-gray-200 rounded-xl shadow-xs">
+            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center shrink-0 text-sm">3</div>
             <div>
-              <h4 className="font-bold text-gray-900 text-[0.9rem] mb-1">담당자 변경 (이관)</h4>
-              <p className="text-[0.8rem] text-gray-500 leading-relaxed">답변이 어려운 전문 분야라면 다른 담당자에게 채팅방을 이관할 수 있습니다.</p>
-            </div>
-          </div>
-          <div className="p-4 bg-white border border-gray-200 rounded-xl shadow-sm flex items-start gap-3">
-            <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center shrink-0">📝</div>
-            <div>
-              <h4 className="font-bold text-gray-900 text-[0.9rem] mb-1">내부 전용 메모</h4>
-              <p className="text-[0.8rem] text-gray-500 leading-relaxed">고객에게는 보이지 않는 팀원 전용 노트를 대화방에 남길 수 있습니다.</p>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1">안내 확인 및 대화 진행</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">
+                접수 대기가 활성화되고, 대시보드 안의 상담 담당자가 방을 수용한 뒤 본격적이고 유기적인 대화가 개시됩니다.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Section 3 */}
-      <section id="demo" className="mb-14 scroll-mt-24 guide-section">
-        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">3. 실시간 상담 체험하기</h2>
+      <section id="agent-response" className="mb-14 scroll-mt-[120px] guide-section">
+        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">3. 상담 담당자는 어떻게 응대하나요?</h2>
+        <p className="text-[0.95rem] text-gray-650 leading-relaxed mb-6">
+          상담방에는 기본적으로 고객과 상담 담당자 1명이 참여합니다.<br/>
+          상담 내용에 따라 다른 상담 담당자가 같은 상담방에 함께 참여할 수 있으며, 여러 상담 담당자가 고객 응대를 함께 진행할 수 있습니다.<br/>
+          또한 상담 담당자끼리는 고객에게 보이지 않는 내부 대화를 통해 응대 방향이나 확인이 필요한 내용을 공유할 수 있습니다.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 text-lg font-semibold">📥</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">상담방 참여</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">상담 담당자는 고객 상담방에 입장해 실시간으로 답변합니다.</p>
+            </div>
+          </div>
+
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 text-lg font-semibold">👥</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">다중 상담 참여</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">필요한 경우 다른 상담 담당자가 같은 상담방에 함께 참여할 수 있습니다.</p>
+            </div>
+          </div>
+
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 text-lg font-semibold">🔒</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">내부 대화</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">상담 담당자끼리 고객에게 보이지 않는 내부 대화를 나눌 수 있습니다.</p>
+            </div>
+          </div>
+
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 text-lg font-semibold">🔍</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">고객 정보 확인</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">상담 중 필요한 고객 정보와 이전 상담 이력을 확인합니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4 */}
+      <section id="features" className="mb-14 scroll-mt-[120px] guide-section">
+        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">4. 상담 중 사용할 수 있는 기능</h2>
+        <p className="text-[0.95rem] text-gray-650 leading-relaxed mb-6">
+          고객 응대와 상담의 능률을 동시에 격상하는 전문화된 도구들을 제공합니다.
+        </p>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 text-lg">💬</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">채팅 메시지 전송</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">고객에게 텍스트 메시지를 보냅니다.</p>
+            </div>
+          </div>
+
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 text-lg">📁</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">이미지/파일 확인</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">고객이 보낸 이미지나 파일을 확인합니다.</p>
+            </div>
+          </div>
+
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 text-lg">🔍</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">고객 정보 확인</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">상담 중 고객 정보를 함께 확인합니다.</p>
+            </div>
+          </div>
+
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 text-lg">👥</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">다중 상담 참여</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">다른 상담 담당자가 같은 상담방에 참여해 함께 고객을 응대할 수 있습니다.</p>
+            </div>
+          </div>
+
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 text-lg">🔒</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">내부 대화</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">상담 담당자끼리 고객에게 보이지 않는 대화를 나눌 수 있습니다.</p>
+            </div>
+          </div>
+
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 text-lg">⚙️</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">상담 상태 변경</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">상담 진행 상태를 변경합니다.</p>
+            </div>
+          </div>
+
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-orange-50 text-orange-600 flex items-center justify-center shrink-0 text-lg">🔄</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">상담 이관</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">필요한 경우 상담을 다른 상담 담당자에게 넘길 수 있습니다.</p>
+            </div>
+          </div>
+
+          <div className="p-5 bg-white border border-gray-200 rounded-xl shadow-xs flex items-start gap-3.5 hover:border-gray-300 transition-colors">
+            <div className="w-9 h-9 rounded bg-pink-50 text-pink-600 flex items-center justify-center shrink-0 text-lg">📝</div>
+            <div>
+              <h4 className="font-bold text-gray-950 text-[15.5px] mb-1.5">내부 메모</h4>
+              <p className="text-[14.5px] text-gray-500 leading-relaxed m-0">고객에게 보이지 않는 기록을 남길 수 있습니다.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* '알아두면 좋아요' 안내 박스 */}
+        <div className="mt-6 p-5 bg-gradient-to-r from-blue-50/70 to-indigo-50/50 border border-blue-100 rounded-2xl">
+          <h4 className="font-bold text-blue-900 mb-2 flex items-center gap-2 text-[15.5px]">
+            💡 알아두면 좋아요
+          </h4>
+          <p className="text-[14.5px] text-blue-800 leading-relaxed m-0">
+            실시간 상담방에는 여러 상담 담당자가 함께 참여할 수 있습니다.<br />
+            상담 담당자끼리 나누는 내부 대화는 <strong>고객에게 보이지 않으며</strong>, 고객 응대 방향을 맞추거나 추가 확인이 필요한 내용을 공유할 때 사용할 수 있습니다.
+          </p>
+        </div>
+      </section>
+
+      {/* Section 5 */}
+      <section id="history" className="mb-14 scroll-mt-[120px] guide-section">
+        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">5. 상담 종료와 이력 확인</h2>
+        <p className="text-[15px] text-gray-600 leading-relaxed mb-6">
+          다중 상담으로 진행된 상담도 하나의 상담 이력으로 남습니다.<br />
+          상담 종료 후에는 고객과의 대화 내용뿐 아니라 상담 처리 과정에서 남긴 내부 기록을 확인할 수 있습니다.<br />
+          단, 고객에게 보이지 않는 내부 대화와 내부 메모는 상담 담당자와 관리자 화면에서만 확인되는 정보로 구분되어야 합니다.
+        </p>
+      </section>
+
+      {/* Section 6 */}
+      <section id="try" className="mb-14 scroll-mt-[120px] guide-section">
+        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">6. 실시간 상담 체험으로 미리 확인하기</h2>
         <p className="text-[0.95rem] text-gray-600 leading-relaxed mb-6">
           유료 플랜(Pro / Enterprise)에서 제공하는 실시간 채팅 기능을 무료로 체험해 볼 수 있습니다.<br/>
           체험 화면은 가상의 환경이므로, 실제 서비스 데이터에 영향을 주거나 요금이 결제되지 않습니다. 편하게 테스트해 보세요.
@@ -1541,9 +1573,9 @@ const LiveChatDoc = ({ setActiveItem }: { setActiveItem: (item: string) => void 
         </Link>
       </section>
 
-      {/* Section 4 */}
-      <section id="next" className="mb-10 scroll-mt-24 guide-section">
-        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">4. 다음에 볼 문서</h2>
+      {/* Section 7 */}
+      <section id="next" className="mb-10 scroll-mt-[120px] guide-section">
+        <h2 className="text-2xl font-bold text-gray-900 mb-5 pb-2 border-b border-gray-100">7. 다음에 볼 문서</h2>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
